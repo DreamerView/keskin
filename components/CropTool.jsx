@@ -9,14 +9,16 @@ export default function CropTool({ src, onDone, onCancel }) {
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const [mode, setMode] = useState('square');
-    const [aspect, setAspect] = useState(1);
-    const [customAspectInput, setCustomAspectInput] = useState('');
+    const [aspect, setAspect] = useState(1 / 1);
+    const [customAspectInput, setCustomAspectInput] = useState(1 / 1);
 
     const aspectGroups = {
-        square: [],
+        square: [
+            { label: 'Current', value: 1 / 1 }
+        ],
         portrait: [
             { label: 'Original', value: null },
-            { label: 'Wallpaper (9:16)', value: 9 / 16 },
+            { label: 'Wallpaper', value: 9 / 16 },
             { label: '4:5', value: 4 / 5 },
             { label: '5:7', value: 5 / 7 },
             { label: '3:4', value: 3 / 4 },
@@ -25,7 +27,7 @@ export default function CropTool({ src, onDone, onCancel }) {
         ],
         landscape: [
             { label: 'Original', value: null },
-            { label: 'Wallpaper (16:9)', value: 16 / 9 },
+            { label: 'Wallpaper', value: 16 / 9 },
             { label: '5:4', value: 5 / 4 },
             { label: '7:5', value: 7 / 5 },
             { label: '4:3', value: 4 / 3 },
@@ -55,19 +57,19 @@ export default function CropTool({ src, onDone, onCancel }) {
 
     return (
         <div>
-            <div className="crop-container position-relative" style={{ width: '100%', height: '400px' }} data-aos="fade-up">
+            <div className="crop-container position-relative" style={{ width: '100%', height: '400px' }} data-aos="fade">
                 <Cropper
                     image={src}
                     crop={crop}
                     zoom={zoom}
-                    aspect={aspect || undefined}
+                    aspect={aspect || 1}
                     onCropChange={setCrop}
                     onZoomChange={setZoom}
                     onCropComplete={onCropComplete}
                 />
             </div>
 
-            <div className="bg-body-tertiary rounded-5 p-3 my-4 d-flex flex-column gap-4" data-aos="fade-up" data-aos-delay="100">
+            <div className="bg-body-tertiary rounded-5 p-3 my-4 d-flex flex-column gap-4" data-aos="fade" data-aos-delay="250">
                 <div className="d-flex justify-content-center gap-2">
                     <button
                         className={`btn rounded-4 ${mode === 'square' ? 'btn-light' : 'btn-outline-light border-0'}`}

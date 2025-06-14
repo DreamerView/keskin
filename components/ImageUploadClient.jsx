@@ -186,7 +186,7 @@ export default function ImageUploadClient() {
 
           <div
             className="d-flex flex-wrap justify-content-center gap-4 mt-3 mx-auto bg-body-tertiary p-3 rounded-5"
-            style={{ maxWidth: 500, width: "100%" }}
+            style={{ maxWidth: 700, width: "100%" }}
             data-aos="fade-up" data-aos-delay="100"
           >
             <button
