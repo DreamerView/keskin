@@ -138,7 +138,50 @@ export default function ImageUploadClient() {
     URL.revokeObjectURL(url);
   };
 
-  const handleExportAs = () => alert('Export As clicked');
+  const handleExportAs = async (format, quality) => {
+    if (!selectedFile) {
+      alert('No image to export');
+      return;
+    }
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = URL.createObjectURL(selectedFile);
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+
+      // Конвертация формата и качество
+      const mime = format === 'jpeg' ? 'image/jpeg' : format === 'png' ? 'image/png' : 'image/webp';
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            alert('Failed to export image.');
+            return;
+          }
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = `exported_image.${format}`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(link.href);
+        },
+        mime,
+        quality / 100
+      );
+    };
+
+    img.onerror = () => {
+      alert('Failed to load image for export.');
+    };
+  };
+
   const handleConvertPWA = () => alert('Convert PWA clicked');
   const handleInfo = () => {
     setShowInfo(true);
@@ -237,7 +280,7 @@ export default function ImageUploadClient() {
         <ConfirmModal
           show={showCloseConfirm}
           title="Start Again?"
-          message="All unsaved changes will be lost. Are you sure you want to start fresh?"
+          message="Are you sure you want to start again?"
           onConfirm={confirmClose}
           onCancel={cancelClose}
         />
